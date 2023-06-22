@@ -9,17 +9,21 @@
  */
 void _rotl(stack_t **stack, unsigned int line_number)
 {
+	stack_t *temp, *last;
+
+	(void) line_number;
 	if (*stack == NULL || (*stack)->next == NULL)
 		return;
 
-	stack_t *first = *stack;
-	stack_t *second = first->next;
+	last = *stack;
+	while (last->next != NULL)
+		last = last->next;
 
-	while (second->next != NULL)
-		second = second->next;
+	temp = *stack;
+	*stack = (*stack)->next;
+	(*stack)->prev = NULL;
+	temp->next = NULL;
+	temp->prev = last;
+	last->next = temp;
 
-	first->prev = second;
-	second->next = first;
-	first->next = NULL;
-	*stack = second;
 }

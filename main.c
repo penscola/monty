@@ -1,5 +1,7 @@
 #include "monty.h"
 
+char stack_queue = 's';
+
 /**
  * main - Entry point
  * @argc: number of arguments passed as parameter to main program.
@@ -13,6 +15,7 @@ int main(int argc, char *argv[])
 	size_t len = 0;
 	unsigned int line_number = 1;
 	char *line = NULL;
+	char *code = NULL;
 	stack_t *stack = NULL;
 
 	if (argc != 2)
@@ -30,28 +33,30 @@ int main(int argc, char *argv[])
 
 	while (getline(&line, &len, stream) != -1)
 	{
-		char *code = strtok(line, " \t\r\n\v\f");
+		code = strtok(line, " \t\r\n\v\f");
 		if (code != NULL && code[0] != '#')
 			get_opcode(&stack, line_number, code);
 		line_number++;
 	}
 
 	free_stack_t(stack);
+	stack = NULL;
 	free(line);
 	fclose(stream);
 	exit(EXIT_SUCCESS);
 }
 
 /**
- * get_opcode - reads opcode and verifies if it is valid.
+ * get_opcode - reads opcode and verifies if is valid.
  * @stack: double pointer to header (top) of the stack.
  * @line_number: counter for line number of the file.
- * @code: opcode to execute.
+ * @code: opcode to excecute.
  *
  * Return: void.
  */
 void get_opcode(stack_t **stack, unsigned int line_number, char *code)
 {
+	int i = 0;
 	instruction_t opcode_func[] = {
 		{"add", _add},
 		{"div", _div},
@@ -73,22 +78,25 @@ void get_opcode(stack_t **stack, unsigned int line_number, char *code)
 		{NULL, NULL}
 	};
 
-	for (int i = 0; opcode_func[i].opcode != NULL; i++)
+	while (opcode_func[i].opcode)
 	{
 		if (strcmp(opcode_func[i].opcode, code) == 0)
 		{
 			opcode_func[i].f(stack, line_number);
 			return;
 		}
+		i++;
 	}
-
 	dprintf(STDERR_FILENO, "L%u: unknown instruction %s\n", line_number, code);
 	free_stack_t(*stack);
+	/**
+	 * close_file
+	 */
 	exit(EXIT_FAILURE);
 }
 
 /**
- * free_stack_t - function that frees a list of type stack_t
+ * free_stack_t - function that free a list of type dlistint_t
  * @head: pointer to a list type stack_t
  *
  * Return: void.
