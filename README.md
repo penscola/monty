@@ -1,6 +1,6 @@
 # MONTY!!
 ## monty interpreter
-![alt text]([https://github.com/betascribbles/monty/blob/main/images/monty.png?raw=true](https://github.com/penscola/monty/blob/master/CFYYWy6UEAE9Ow-.png))
+![alt text](https://github.com/penscola/monty/blob/master/CFYYWy6UEAE9Ow-.png)
 
 
 ## The Monty language
